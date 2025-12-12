@@ -12,7 +12,21 @@ if (! function_exists('getSetting')) {
      */
     function getSetting(string $code, $default = null)
     {
-        return Setting::getByCode($code, $default);
+        $setting = Setting::getByCode($code);
+        
+        if (!$setting) {
+            return $default;
+        }
+
+        // Cast value based on type
+        return match($setting->type) {
+            'csv' => !empty($setting->value) ? explode(',', $setting->value) : [],
+            'boolean' => filter_var($setting->value, FILTER_VALIDATE_BOOLEAN),
+            'integer' => (int) $setting->value,
+            'float' => (float) $setting->value,
+            'json' => json_decode($setting->value, true),
+            default => $setting->value,
+        };
     }
 }
 

@@ -8,17 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Setting extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'category',
-        'label',
-        'code',
-        'value',
-    ];
+    protected $guarded = [];
 
     /**
      * Get the table associated with the model.
